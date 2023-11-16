@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Unidad</title>
+</head>
+<body class="mt-5">
+    <div class="alert alert-info display-1 text-center">Agregar Unidad</div>
+
+    <form method="POST">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="AGREGAR VOLUNTARIO" class="btn btn-info">
+    </form>
+</body>
+</html>
