@@ -89,6 +89,10 @@
         .bd-mode-toggle {
             z-index: 1500;
         }
+        #contenedorSuper {
+            margin-left: -35px;
+
+        }
      
         
 
@@ -98,7 +102,7 @@
 </head>
 <header>
     <div class="navbar navbar-dark bg-dark shadow-sm ">
-        <div class="container ">
+        <div class="container">
             <a id="contenedorSuper" href="#" class="navbar-brand d-flex align-items-center me-auto" style="width: 50%;">
                 <strong style="width: 50%;">
                     <svg class="bi pe-none me-auto" width="40" height="32">
@@ -152,7 +156,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link text-dark" style="border: 2px solid red;">
+                <a href="{% url 'verInfoCuartelActual' voluntario.cuartel_actual_vol.idCuartel %}" class="nav-link text-dark" style="border: 2px solid red;">
                     <svg class="bi pe-none ms-2" width="16" height="16">
                         <use xlink:href="#grid" />
                     </svg>
@@ -168,7 +172,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link text-dark">
+                <a href="{% url 'editar_voluntario' voluntario.rut %}" class="nav-link text-dark">
                     <svg class="bi pe-none ms-2" width="16" height="16">
                         <use xlink:href="#grid" />
                     </svg>
@@ -186,7 +190,7 @@
         </ul>
     </div>
     <main class="d-flex flex-nowrap">
-        <div class="container">
+        <div class="container mt-5">
             <h1>Voluntarios Disponibles: {{cuartel.voluntarios_in}}</h1>
             <h1>Unidades Disponibles: {{cuartel.unidades_in}}</h1>      
         </div>

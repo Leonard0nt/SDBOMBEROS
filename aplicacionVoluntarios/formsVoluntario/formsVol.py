@@ -25,6 +25,7 @@ class VoluntarioEditForm(forms.ModelForm):
 
     widgets = {
         'password': forms.PasswordInput(),
+        'direccion': forms.Textarea(attrs={'rows':2,'class': 'form-control col-md-6'})
     }
            
 

@@ -24,7 +24,9 @@ class VoluntarioForm(forms.ModelForm):
     class Meta:
         model = voluntarios
         fields = ['rut','password','nombres','apellidos','cargo','telefono','compania','numero_registro','direccion']  # Utiliza '__all__' para incluir todos los campos del modelo en el formulario
-
+        widgets = {
+            'direccion': forms.Textarea(attrs={'rows': 2}),
+        }
     # Puedes personalizar el formulario si es necesario
     # Por ejemplo, puedes agregar validaciones adicionales, widgets, etc.
     def save(self, commit=True):
@@ -38,11 +40,6 @@ class VoluntarioForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-    
-    # Agrega un widget para el campo 'direccion' para que sea un textarea
-    widgets = {
-        'direccion': forms.Textarea(attrs={'rows': 3}),
-    }
 
     # Agrega una validación personalizada para el campo 'rut'
     def clean_rut(self):
@@ -60,18 +57,8 @@ class UnidadForm(forms.ModelForm):
         fields = ['nomenclatura','patente','especialidad','cuartel_actual_uni','comentario']  # Utiliza '__all__' para incluir todos los campos del modelo en el formulario
         cuartel_actual_uni = forms.ModelChoiceField(queryset=cuarteles.objects.all(), required=True)
     # Agrega un widget para el campo 'comentario' para que sea un textarea
-    widgets = {
-        'comentario': forms.Textarea(attrs={'rows': 3}),
-    }
+        widgets = {
+            'comentario': forms.Textarea(attrs={'rows': 2}),
+        }
     
 
-#class UnidadEditForm(forms.ModelForm):
-    # Puedes agregar campos adicionales o personalizar según sea necesario
-    #class Meta:
-     #   model = voluntarios
-      #  fields = ['disponibilidad', 'comentario','cuartel_actual_uni']
-       # cuartel_actual_uni = forms.ModelChoiceField(queryset=cuarteles.objects.all(), required=True)
-    # Agrega un widget para el campo 'comentario' para que sea un textarea
-    #widgets = {
-     #   'comentario': forms.Textarea(attrs={'rows': 3}),
-    #}

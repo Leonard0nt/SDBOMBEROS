@@ -168,7 +168,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'cuartelUnidades' cuartel.idCuartel %}"class="nav-link text-dark" aria-current="page" style="border: 2px solid red;">
+                    <a href="{% url 'cuartelUnidades' cuartel.idCuartel %}"class="nav-link text-dark" aria-current="page" style="border: 1px solid red;">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#grid" />
                         </svg>
@@ -190,7 +190,6 @@
                         <th>Disponibilidad</th>
                         <th>Especialidad</th>
                         <th>Comentario</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -205,8 +204,6 @@
                     {% endif %}
                     <th>{{unidad.especialidad}}</th>              
                     <th>{{unidad.comentario}}</th>
-                    <th><p class="float-end mb-1">
-                        <a href="#">Editar</a></th>
                 </tr>
                 {% endfor %}
                 </tbody>
