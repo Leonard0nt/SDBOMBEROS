@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
 
+
 def validar_rut(rut):
         rut = rut.replace(".", "").replace("-", "")
         if not rut[:-1].isdigit():
@@ -60,5 +61,6 @@ class UnidadForm(forms.ModelForm):
         widgets = {
             'comentario': forms.Textarea(attrs={'rows': 2}),
         }
-    
+
+
 
