@@ -9,6 +9,10 @@ class VoluntarioEditForm(forms.ModelForm):
     class Meta:
         model = voluntarios
         fields = ['nombres', 'apellidos', 'telefono', 'compania', 'direccion', 'password']
+        widgets = {
+            'password': forms.PasswordInput(attrs={'value':''}),
+            'direccion': forms.Textarea(attrs={'rows':2,'class': 'form-control col-md-6'})
+        }
 
     def save(self, commit=True):
         voluntario = super().save(commit=False)
@@ -23,9 +27,6 @@ class VoluntarioEditForm(forms.ModelForm):
 
         return voluntario
 
-    widgets = {
-        'password': forms.PasswordInput(),
-        'direccion': forms.Textarea(attrs={'rows':2,'class': 'form-control col-md-6'})
-    }
+
            
 
