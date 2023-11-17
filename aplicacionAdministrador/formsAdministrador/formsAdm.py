@@ -24,7 +24,7 @@ def validar_rut(rut):
 class VoluntarioForm(forms.ModelForm):
     class Meta:
         model = voluntarios
-        fields = ['rut','password','nombres','apellidos','cargo','telefono','compania','numero_registro','direccion']  # Utiliza '__all__' para incluir todos los campos del modelo en el formulario
+        fields = ['rut','password','nombres','apellidos','cargo','telefono','compania','numero_registro','conductor','direccion']  # Utiliza '__all__' para incluir todos los campos del modelo en el formulario
         widgets = {
             'direccion': forms.Textarea(attrs={'rows': 2}),
         }

@@ -58,6 +58,7 @@ class voluntarios(AbstractUser):
     numero_registro = models.IntegerField(unique=True,default=0000)
     estado = models.BooleanField(default=False)
     direccion = models.TextField(blank=True,default='')
+    conductor = models.BooleanField(default=False)
     unidad_asignada = models.CharField(max_length=4, default=0)
 
    

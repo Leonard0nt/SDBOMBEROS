@@ -52,6 +52,17 @@ def homeAdmCuartelVoluntarios(request,idCuartel):
     return render(request, "../templates/templatesAdministrador/cuartelVoluntarios.html", contexto)
 
 @login_required
+def administracionVoluntarios(request):
+    adm = request.user
+    voluntarios_list = voluntarios.objects.filter(is_staff=False)
+    
+    contexto = {
+        'adm': adm,
+        'voluntarios_list': voluntarios_list,
+        }
+    return render(request, "../templates/templatesAdministrador/administracionVoluntarios.html", contexto)
+
+@login_required
 def homeAdmCuartelUnidades(request,idCuartel):
     idCuartell = idCuartel
     img = "../static/Bomberos.png"
@@ -66,6 +77,19 @@ def homeAdmCuartelUnidades(request,idCuartel):
         'img' : img,
         }
     return render(request, "../templates/templatesAdministrador/cuartelUnidades.html", contexto)
+
+@login_required
+def administracionUnidades(request):
+    img = "../static/Bomberos.png"
+    adm = request.user
+    unidadesAdm = unidades.objects.all()
+    
+    contexto = {
+        'voluntario': adm,
+        'unidadesAdm': unidadesAdm,
+        'img' : img,
+        }
+    return render(request, "../templates/templatesAdministrador/administracionUnidades.html", contexto)
 
 @login_required
 def agregarVoluntario(request):
