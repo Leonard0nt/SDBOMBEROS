@@ -163,20 +163,21 @@
                     Info Cuartel Actual
                 </a>
             </li>
-            <li>
-                <a href="#" class="nav-link text-dark">
-                    <svg class="bi pe-none ms-2" width="16" height="16">
-                        <use xlink:href="#grid" />
-                    </svg>
-                    Aviso Diario
-                </a>
-            </li>
+
             <li>
                 <a href="{% url 'editar_voluntario' voluntario.rut %}" class="nav-link text-dark" style="border: 2px solid red;">
                     <svg class="bi pe-none ms-2" width="16" height="16">
                         <use xlink:href="#grid" />
                     </svg>
                     Configurar perfil
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'editar_contraseña' voluntario.rut %}" class="nav-link text-dark">
+                    <svg class="bi pe-none ms-2" width="16" height="16">
+                        <use xlink:href="#grid" />
+                    </svg>
+                    Cambiar contraseña
                 </a>
             </li>
             <li>

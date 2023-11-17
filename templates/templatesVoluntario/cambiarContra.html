@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ventanaVoltunario</title>
+    <title>AdmCuartel</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
 
@@ -89,6 +89,10 @@
         .bd-mode-toggle {
             z-index: 1500;
         }
+        #contenedorSuper {
+            margin-left: -35px;
+
+        }
      
         
 
@@ -97,9 +101,9 @@
 
 </head>
 <header>
-    <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="navbar navbar-dark bg-dark shadow-sm ">
         <div class="container">
-            <a style="margin-left: -35px;" href="#" class="navbar-brand d-flex align-items-center me-auto" style="width: 50%;">
+            <a id="contenedorSuper" href="#" class="navbar-brand d-flex align-items-center me-auto" style="width: 50%;">
                 <strong style="width: 50%;">
                     <svg class="bi pe-none me-auto" width="40" height="32">
                         <style>
@@ -113,15 +117,17 @@
                     <span style="font-size: 15px;">Cuerpo de bomberos Parral</span>
                 </strong>
             </a>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                    <strong style="color: white;">{{voluntario.nombres}} {{voluntario.apellidos}}</strong>
-                </a>
-                <ul class="dropdown-menu text-small shadow">
-                    <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesion</a></li>
-                </ul>
+            <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" ;>
+                <nav class="navbar navbar-dark bg-dark sticky-top ">
+                    <div class="container-fluid">
+                        <!-- Botón de alternancia -->
+                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                </nav>
             </div>
         </div>
 </header>
@@ -139,65 +145,63 @@
         </symbol>
     </svg>
 
-    <main class="d-flex flex-nowrap">
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-light" style="width: 230px;">
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="/administrador" class="nav-link text-dark" aria-current="page">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#home" />
-                        </svg>
-                        Home
-                    </a>
-                </li>
-                <li>
-                    <a href="/agregarVoluntario" class="nav-link text-dark" >
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#grid" />
-                        </svg>
-                        Agregar Voluntario
-                    </a>
-                </li>
-                <li>
-                    <a href="/agregarUnidad" class="nav-link text-dark" style="border: 1px solid red;">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#grid" />
-                        </svg>
-                        Agregar Unidad
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-dark">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#grid" />
-                        </svg>
-                        XXXXXXXXXXX
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="b-example-divider b-example-vr"></div>
+    <div class="collapse navbar-collapse" style="width: 100%;" id="navbarNav">
+        <ul class="nav nav-pills flex-column mb-auto text-center" style="width: 100%;">
+            <li class="nav-item">
+                <a href="{% url 'voluntario' %}" class="nav-link text-dark"  aria-current="page" >
+                    <svg class="bi pe-none ms-2" width="16" height="16">
+                        <use xlink:href="#home" />
+                    </svg>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'verInfoCuartelActual' voluntario.cuartel_actual_vol.idCuartel %}" class="nav-link text-dark" >
+                    <svg class="bi pe-none ms-2" width="16" height="16">
+                        <use xlink:href="#grid" />
+                    </svg>
+                    Info Cuartel Actual
+                </a>
+            </li>
 
-        <div class="container">
-            <div class="row mt-5">
-                <form class="form-control" method="POST">
-                    {{ form.as_p }}
-                    {% csrf_token %}
-                    <input type="submit" value="AGREGAR UNIDAD" class="btn btn-danger">
-                </form>
-            </div>  
+            <li>
+                <a href="{% url 'editar_voluntario' voluntario.rut %}" class="nav-link text-dark" >
+                    <svg class="bi pe-none ms-2" width="16" height="16">
+                        <use xlink:href="#grid" />
+                    </svg>
+                    Configurar perfil
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'editar_contraseña' voluntario.rut %}" class="nav-link text-dark" style="border: 2px solid red;">
+                    <svg class="bi pe-none ms-2" width="16" height="16">
+                        <use xlink:href="#grid" />
+                    </svg>
+                    Cambiar contraseña
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}" class="nav-link text-dark">
+                    <svg class="bi pe-none ms-2" width="16" height="16">
+                        <use xlink:href="#grid" />
+                    </svg>
+                    Cerrar sesion
+                </a>
+            </li>
+        </ul>
+    </div>
+    <main class="d-flex flex-nowrap">
+        <div class="container mt-5">
+            <h1>Cambiar Contraseña</h1>
+            <form class="form-control " method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Guardar cambios</button>
+            </form>   
         </div>
     </main>
-    <footer class="text-body-secondary py-5">
-        <div class="container">
-            <p class="float-end mb-1">
-                <a href="#">Back to top</a>
 
-            <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-                    href="../getting-started/introduction/">getting started guide</a>.</p>
-        </div>
-    </footer>
+
     <script src="{% static 'aplicacionVoluntarios/js/bootstrap.bundle.min.js' %}"></script>
 
 </body>

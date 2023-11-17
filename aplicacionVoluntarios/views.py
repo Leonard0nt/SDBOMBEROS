@@ -4,6 +4,7 @@ from aplicacionAdministrador.models import *
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from aplicacionVoluntarios.formsVoluntario.formsVol import VoluntarioEditForm
+from aplicacionVoluntarios.formsVoluntario.formsVolPass import ContrasenaEditForm
 
 
 
@@ -81,13 +82,22 @@ def edit_voluntario(request, rut):
         form = VoluntarioEditForm(request.POST, instance=voluntario)
         if form.is_valid():
             form.save()
-            if 'password' in form.changed_data:
-                # Redirigir a la página de inicio de sesión si la contraseña cambió
-                return redirect(reverse('login'))
-            else:
-                # Redirigir a otra página si la contraseña no cambió
-                return redirect(reverse('voluntario'))
+            return redirect(reverse('voluntario'))
     else:
         form = VoluntarioEditForm(instance=voluntario)
 
     return render(request, '../templates/templatesVoluntario/configPerfil.html', {'form': form, 'voluntario': voluntario})
+
+
+def edit_contrasena(request, rut):
+    voluntario = get_object_or_404(voluntarios, rut=rut)
+    
+    if request.method == 'POST':
+        form = ContrasenaEditForm(request.POST, instance=voluntario)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('login'))
+    else:
+        form = ContrasenaEditForm(instance=voluntario)
+
+    return render(request, '../templates/templatesVoluntario/cambiarContra.html', {'form': form, 'voluntario': voluntario})
