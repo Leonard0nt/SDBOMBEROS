@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from aplicacionVoluntarios import views as viewsVoluntario
 from django.http import JsonResponse
+from django import forms
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.views import LoginView
 # Create your views here.
 
@@ -80,11 +82,13 @@ def homeAdmCuartelUnidades(request,idCuartel):
 
 @login_required
 def administracionUnidades(request):
+    cuartelesUni = cuarteles.objects.all()
     img = "../static/Bomberos.png"
     adm = request.user
     unidadesAdm = unidades.objects.all()
     
     contexto = {
+        'cuarteles': cuartelesUni,
         'voluntario': adm,
         'unidadesAdm': unidadesAdm,
         'img' : img,
@@ -153,8 +157,45 @@ def editar_voluntarioADM(request, rut):
 
 
 
+def eliminar_voluntario(request, rut):
+    voluntario = get_object_or_404(voluntarios, rut=rut)
+    
+    voluntario.delete()
+
+    return redirect(administracionVoluntarios)
 
 
+def cambiar_password_vol(request,rut):
+    voluntario = get_object_or_404(voluntarios, rut=rut)
+
+    if request.method == 'POST':
+        voluntario.set_password(request.POST.get('nueva_contrasena'))
+        voluntario.save()
+    
+    return redirect(administracionVoluntarios)
+
+def editar_unidadADM(request, nomenclatura):
+    unidad = get_object_or_404(unidades, nomenclatura=nomenclatura)
+
+    if request.method == 'POST':
+        unidad.especialidad = request.POST.get('especialidad')
+        cuartelid = request.POST.get('cuartel_actual_uni')
+        cuartel = cuarteles.objects.get(idCuartel = cuartelid)
+        unidad.cuartel_actual_uni = cuartel
+        unidad.comentario= request.POST.get('comentario')
 
 
+        estado_value = request.POST.get('disponibilidad', False)
+        unidad.estado_unidad = True if estado_value else False
 
+
+        unidad.save()  # Guarda el cambio en la base de datos
+
+        return redirect(administracionUnidades)
+
+def eliminar_unidadADM(request,nomenclatura):
+    unidad = get_object_or_404(unidades, nomenclatura=nomenclatura)
+
+    unidad.delete()
+
+    return redirect(administracionUnidades)

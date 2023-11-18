@@ -89,9 +89,6 @@
         .bd-mode-toggle {
             z-index: 1500;
         }
-     
-        
-
     </style>
 
 
@@ -99,7 +96,8 @@
 <header>
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
-            <a style="margin-left: -35px;" href="#" class="navbar-brand d-flex align-items-center me-auto" style="width: 50%;">
+            <a style="margin-left: -35px;" href="#" class="navbar-brand d-flex align-items-center me-auto"
+                style="width: 50%;">
                 <strong style="width: 50%;">
                     <svg class="bi pe-none me-auto" width="40" height="32">
                         <style>
@@ -132,7 +130,7 @@
             <path
                 d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
         </symbol>
-       
+
         <symbol id="grid" viewBox="0 0 16 16">
             <path
                 d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
@@ -168,7 +166,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/administracionVoluntarios" class="nav-link text-dark" >
+                    <a href="/administracionVoluntarios" class="nav-link text-dark">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#grid" />
                         </svg>
@@ -183,7 +181,6 @@
                         Lista Unidades
                     </a>
                 </li>
-
             </ul>
         </div>
         <div class="b-example-divider b-example-vr"></div>
@@ -202,21 +199,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for unidad in unidadesAdm %}
-                <tr>
-                    <th>{{unidad.nomenclatura}}</th>
-                    <th>{{unidad.patente}}</th>
-                    {% if unidad.estado_unidad %}
+                    {% for unidad in unidadesAdm %}
+                    <tr>
+                        <th>{{unidad.nomenclatura}}</th>
+                        <th>{{unidad.patente}}</th>
+                        {% if unidad.estado_unidad %}
                         <th>Disponible</th>
-                    {% else %}
+                        {% else %}
                         <th>No-disponible</th>
-                    {% endif %}
-                    <th>{{unidad.especialidad}}</th>
-                    <th>{{unidad.cuartel_actual_uni.idCuartel}}</th>              
-                    <th>{{unidad.comentario}}</th>
-                    <th><th><a href=""  name="editarUnidad" value="{{voluntario.rut}}">Editar</a></th></th>
-                </tr>
-                {% endfor %}
+                        {% endif %}
+                        <th>{{unidad.especialidad}}</th>
+                        <th>{{unidad.cuartel_actual_uni.nombre_cuartel}}</th>
+                        <th>{{unidad.comentario}}</th>
+                        <th>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#editarUnidadModal{{ unidad.nomenclatura }}">
+                                Editar
+                            </button>
+                        </th>
+                        <th>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#eliminarUnidadModal{{ unidad.nomenclatura }}">
+                                Eliminar
+                            </button>
+                        </th>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             {% else %}
@@ -224,7 +232,80 @@
                 <Strong>No existen unidades registradas </Strong>
             </div>
             {% endif %}
-       
+
+            {% for unidad in unidadesAdm %}
+            <div class="modal fade" id="editarUnidadModal{{ unidad.nomenclatura }}" tabindex="-1"
+                aria-labelledby="editarUnidadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarUnidadModalLabel">Editar Unidad</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Formulario de edición de unidad -->
+                            <form method="post" action="{% url 'editar_unidadADM' unidad.nomenclatura %}">
+                                {% csrf_token %}
+
+                                <div class="mb-3">
+                                    <label for="id_especialidad">Especialidad:</label>
+                                    <input type="text" id="id_especialidad" name="especialidad"
+                                        value="{{ unidad.especialidad }}" class="form-control">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="id_cuartel_actual_uni">Cuartel Actual:</label>
+                                    <select id="id_cuartel_actual_uni" name="cuartel_actual_uni" class="form-select">
+                                        {% for cuartel in cuarteles %}
+                                            <option value="{{ cuartel.idCuartel }}" {% if cuartel.idCuartel == unidad.cuartel_actual_uni.idCuartel %} selected {% endif %}>
+                                            {{ cuartel.nombre_cuartel }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="id_comentario">Comentario:</label>
+                                    <textarea id="id_comentario" name="comentario" class="form-control col-md-6"
+                                        rows="2">{{ unidad.comentario }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="id_disponibilidad">Disponibilidad:</label>
+                                    <input type="checkbox" id="id_disponibilidad" name="disponibilidad" {% if unidad.estado_unidad %} checked {% endif %}>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% for unidad in unidadesAdm %}
+            <div class="modal fade" id="eliminarUnidadModal{{ unidad.nomenclatura }}" tabindex="-1"
+                aria-labelledby="eliminarUnidadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eliminarUnidadModalLabel">Eliminar Unidad</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que deseas eliminar la unidad "{{ unidad.nomenclatura }}"?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="post" action="{% url 'eliminar_unidadADM' unidad.nomenclatura %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
     </main>
     <footer class="text-body-secondary py-5">
         <div class="container">

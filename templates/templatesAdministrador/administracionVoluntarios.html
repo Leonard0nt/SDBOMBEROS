@@ -194,10 +194,10 @@
                         <th>Rut</th>
                         <th>Nombres</th>
                         <th>Apellidos</th>
+                        <th>Ult Conexion</th>
                         <th>Cuartel</th>
                         <th>Cargo</th>
                         <th>Disp..</th>
-                        <th>Compañia</th>
                         <th>n° registro</th>
                         <th>Conductor</th>
                         <th>unidad</th>
@@ -210,14 +210,14 @@
                         <th>{{voluntario.rut}}</th>
                         <th>{{voluntario.nombres}}</th>
                         <th>{{voluntario.apellidos}}</th>
-                        <th>{{voluntario.cuartel_actual_vol.idCuartel}}</th>
+                        <th>{{voluntario.last_login}}</th>
+                        <th>{{voluntario.cuartel_actual_vol.nombre_cuartel}}</th>
                         <th>{{voluntario.cargo}}</th>
                         {% if voluntario.estado %}
                         <th>Si</th>
                         {% else %}
                         <th>No</th>
                         {% endif %}
-                        <th>{{voluntario.compania}}</th>
                         <th>{{voluntario.numero_registro}}</th>
                         {% if voluntario.conductor %}
                         <th>Si</th>
@@ -231,6 +231,13 @@
                                 Editar
                             </button>
                         </th>
+                        <th>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#eliminarVoluntarioModal{{ voluntario.rut }}">
+                                Eliminar
+                            </button>
+                        </th>
+
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -254,50 +261,109 @@
                             <!-- Formulario de edición -->
                             <form method="post" action="{% url 'editar_voluntarioADM' voluntario.rut %}">
                                 {% csrf_token %}
-                                
+
                                 <div class="mb-3">
                                     <label for="id_nombres">Nombres:</label>
-                                    <input type="text" id="id_nombres" name="nombres" value="{{ voluntario.nombres }}" class="form-control">
+                                    <input type="text" id="id_nombres" name="nombres" value="{{ voluntario.nombres }}"
+                                        class="form-control">
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="id_apellidos">Apellidos:</label>
-                                    <input type="text" id="id_apellidos" name="apellidos" value="{{ voluntario.apellidos }}" class="form-control">
+                                    <input type="text" id="id_apellidos" name="apellidos"
+                                        value="{{ voluntario.apellidos }}" class="form-control">
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="id_cargo">Cargo:</label>
-                                    <input type="text" id="id_cargo" name="cargo" value="{{ voluntario.cargo }}" class="form-control">
+                                    <input type="text" id="id_cargo" name="cargo" value="{{ voluntario.cargo }}"
+                                        class="form-control">
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="id_telefono">Teléfono:</label>
-                                    <input type="text" id="id_telefono" name="telefono" value="{{ voluntario.telefono }}" class="form-control">
+                                    <input type="text" id="id_telefono" name="telefono"
+                                        value="{{ voluntario.telefono }}" class="form-control">
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="id_compania">Compañía:</label>
-                                    <input type="text" id="id_compania" name="compania" value="{{ voluntario.compania }}" class="form-control">
+                                    <input type="text" id="id_compania" name="compania"
+                                        value="{{ voluntario.compania }}" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label for="id_direccion">Dirección:</label>
-                                    <textarea id="id_direccion" name="direccion" class="form-control col-md-6" rows="2">{{ voluntario.direccion }}</textarea>
+                                    <textarea id="id_direccion" name="direccion" class="form-control col-md-6"
+                                        rows="2">{{ voluntario.direccion }}</textarea>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="id_conductor">Conductor:</label>
                                     <input type="checkbox" id="id_conductor" name="conductor" {% if voluntario.conductor %}checked{% endif %}>
                                 </div>
-                                
-                            
-                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+
+                                <div class="d-flex">
+                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                    <button  type="button" class="btn btn-warning ms-auto" data-bs-toggle="modal"
+                                        data-bs-target="#cambiarContrasenaModal{{ voluntario.rut }}">
+                                        Cambiar Contraseña
+                                    </button> 
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal de cambio de contraseña -->
+            <div class="modal fade" id="cambiarContrasenaModal{{ voluntario.rut }}" tabindex="-1"
+                aria-labelledby="cambiarContrasenaModalLabel{{ voluntario.rut }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cambiarContrasenaModalLabel{{ voluntario.rut }}">Cambiar
+                                Contraseña</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Formulario de cambio de contraseña -->
+                            <form method="post" action="{% url 'cambiar_password_vol' voluntario.rut %}">
+                                {% csrf_token %}
+
+                                <div class="mb-3">
+                                    <label for="id_nueva_contrasena">Nueva Contraseña:</label>
+                                    <input type="password" id="id_nueva_contrasena" name="nueva_contrasena"
+                                        class="form-control">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
-
+            {% for voluntario in voluntarios_list %}
+            <div class="modal fade" id="eliminarVoluntarioModal{{ voluntario.rut }}" tabindex="-1"
+                aria-labelledby="eliminarVoluntarioModalLabel{{ voluntario.rut }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eliminarVoluntarioModalLabel{{ voluntario.rut }}">Eliminar
+                                Voluntario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que deseas eliminar al voluntario {{ voluntario.nombres }} {{
+                                voluntario.apellidos }}?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <a href="{% url 'eliminar_voluntario' voluntario.rut %}" class="btn btn-danger">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
 
 
 

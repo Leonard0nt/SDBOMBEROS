@@ -38,7 +38,11 @@ urlpatterns = [
     path('login/', viewAdm.CustomLoginView.as_view(), name = 'login'),
     path('logout/', LogoutView.as_view(next_page='/login'), name='logout'),
     path('editar_voluntarioADM/<str:rut>/', viewAdm.editar_voluntarioADM, name='editar_voluntarioADM'),
+    path('eliminar_voluntario/<str:rut>/', viewAdm.eliminar_voluntario, name='eliminar_voluntario'),
     path('editar_voluntario/<str:rut>/', viewVoluntario.edit_voluntario, name='editar_voluntario'),
     path('editar_contraseña/<str:rut>/', viewVoluntario.edit_contrasena, name='editar_contraseña'),
+    path('cambiar_password_vol/<str:rut>/', viewAdm.cambiar_password_vol, name='cambiar_password_vol'),
+    path('editar_unidadADM/<str:nomenclatura>/', viewAdm.editar_unidadADM, name='editar_unidadADM'),
+    path('eliminar_unidadADM/<str:nomenclatura>/', viewAdm.eliminar_unidadADM, name='eliminar_unidadADM'),
     path('', viewAdm.CustomLoginView.as_view(), name = 'login'),
 ]
