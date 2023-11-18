@@ -37,6 +37,7 @@ urlpatterns = [
     path('verInfoCuartelActual/<int:idCuartel>/',viewVoluntario.verCuartelActual, name='verInfoCuartelActual'),
     path('login/', viewAdm.CustomLoginView.as_view(), name = 'login'),
     path('logout/', LogoutView.as_view(next_page='/login'), name='logout'),
+    path('editar_voluntarioADM/<str:rut>/', viewAdm.editar_voluntarioADM, name='editar_voluntarioADM'),
     path('editar_voluntario/<str:rut>/', viewVoluntario.edit_voluntario, name='editar_voluntario'),
     path('editar_contraseña/<str:rut>/', viewVoluntario.edit_contrasena, name='editar_contraseña'),
     path('', viewAdm.CustomLoginView.as_view(), name = 'login'),

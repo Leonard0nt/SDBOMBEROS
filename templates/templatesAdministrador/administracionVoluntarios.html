@@ -89,9 +89,6 @@
         .bd-mode-toggle {
             z-index: 1500;
         }
-     
-        
-
     </style>
 
 
@@ -99,7 +96,8 @@
 <header>
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
-            <a style="margin-left: -35px;" href="#" class="navbar-brand d-flex align-items-center me-auto" style="width: 50%;">
+            <a style="margin-left: -35px;" href="#" class="navbar-brand d-flex align-items-center me-auto"
+                style="width: 50%;">
                 <strong style="width: 50%;">
                     <svg class="bi pe-none me-auto" width="40" height="32">
                         <style>
@@ -132,7 +130,7 @@
             <path
                 d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
         </symbol>
-       
+
         <symbol id="grid" viewBox="0 0 16 16">
             <path
                 d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
@@ -176,7 +174,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/administracionUnidades" class="nav-link text-dark" >
+                    <a href="/administracionUnidades" class="nav-link text-dark">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#grid" />
                         </svg>
@@ -207,29 +205,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for voluntario in voluntarios_list %}
-                <tr>
-                    <th>{{voluntario.rut}}</th>
-                    <th>{{voluntario.nombres}}</th>
-                    <th>{{voluntario.apellidos}}</th>
-                    <th>{{voluntario.cuartel_actual_vol.idCuartel}}</th>
-                    <th>{{voluntario.cargo}}</th>
-                    {% if voluntario.estado %}
+                    {% for voluntario in voluntarios_list %}
+                    <tr>
+                        <th>{{voluntario.rut}}</th>
+                        <th>{{voluntario.nombres}}</th>
+                        <th>{{voluntario.apellidos}}</th>
+                        <th>{{voluntario.cuartel_actual_vol.idCuartel}}</th>
+                        <th>{{voluntario.cargo}}</th>
+                        {% if voluntario.estado %}
                         <th>Si</th>
-                    {% else %}
+                        {% else %}
                         <th>No</th>
-                    {% endif %}
-                    <th>{{voluntario.compania}}</th>
-                    <th>{{voluntario.numero_registro}}</th>
-                    {% if voluntario.conductor %}
+                        {% endif %}
+                        <th>{{voluntario.compania}}</th>
+                        <th>{{voluntario.numero_registro}}</th>
+                        {% if voluntario.conductor %}
                         <th>Si</th>
-                    {% else %}
+                        {% else %}
                         <th>No</th>
-                    {% endif %}
-                    <th>{{voluntario.unidad_asignada}}</th>
-                    <th><a href=""  name="editarVoluntario" value="{{voluntario.rut}}">Editar</a></th>
-                </tr>
-                {% endfor %}
+                        {% endif %}
+                        <th>{{voluntario.unidad_asignada}}</th>
+                        <th>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#editarVoluntarioModal{{ voluntario.rut }}">
+                                Editar
+                            </button>
+                        </th>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             {% else %}
@@ -237,6 +240,68 @@
                 <Strong>No hay voluntarios registrados</Strong>
             </div>
             {% endif %}
+
+            {% for voluntario in voluntarios_list %}
+            <div class="modal fade" id="editarVoluntarioModal{{ voluntario.rut }}" tabindex="-1"
+                aria-labelledby="editarVoluntarioModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarVoluntarioModalLabel">Editar Voluntario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Formulario de edición -->
+                            <form method="post" action="{% url 'editar_voluntarioADM' voluntario.rut %}">
+                                {% csrf_token %}
+                                
+                                <div class="mb-3">
+                                    <label for="id_nombres">Nombres:</label>
+                                    <input type="text" id="id_nombres" name="nombres" value="{{ voluntario.nombres }}" class="form-control">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="id_apellidos">Apellidos:</label>
+                                    <input type="text" id="id_apellidos" name="apellidos" value="{{ voluntario.apellidos }}" class="form-control">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="id_cargo">Cargo:</label>
+                                    <input type="text" id="id_cargo" name="cargo" value="{{ voluntario.cargo }}" class="form-control">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="id_telefono">Teléfono:</label>
+                                    <input type="text" id="id_telefono" name="telefono" value="{{ voluntario.telefono }}" class="form-control">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="id_compania">Compañía:</label>
+                                    <input type="text" id="id_compania" name="compania" value="{{ voluntario.compania }}" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_direccion">Dirección:</label>
+                                    <textarea id="id_direccion" name="direccion" class="form-control col-md-6" rows="2">{{ voluntario.direccion }}</textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="id_conductor">Conductor:</label>
+                                    <input type="checkbox" id="id_conductor" name="conductor" {% if voluntario.conductor %}checked{% endif %}>
+                                </div>
+                                
+                            
+                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+
+
     </main>
     <footer class="text-body-secondary py-5">
         <div class="container">

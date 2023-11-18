@@ -67,7 +67,7 @@ def homeAdmCuartelUnidades(request,idCuartel):
     idCuartell = idCuartel
     img = "../static/Bomberos.png"
     adm = request.user
-    unidadesCuartel = unidades.objects.filter(cuartel_actual_uni = idCuartell)
+    unidadesCuartel = unidades.objects.filter(cuartel_actual_uni = idCuartell,estado_unidad = True)
     cuartelActual = cuarteles.objects.get(idCuartel=idCuartell)
     
     contexto = {
@@ -131,6 +131,25 @@ def agregarUnidad(request):
     return render(request, '../templates/templatesAdministrador/agregarUnidad.html', {'form': form})
 
 
+def editar_voluntarioADM(request, rut):
+    voluntario = get_object_or_404(voluntarios, rut=rut)
+    
+    if request.method == 'POST':
+        voluntario.nombres = request.POST.get('nombres')
+        voluntario.apellidos = request.POST.get('apellidos')
+        voluntario.cargo = request.POST.get('cargo')
+        voluntario.telefono = request.POST.get('telefono')
+        voluntario.compania = request.POST.get('compania')
+        voluntario.direccion = request.POST.get('direccion')
+        conductor_value = request.POST.get('conductor')
+
+        conductor_value = request.POST.get('conductor', False)
+        voluntario.conductor = True if conductor_value else False
+
+
+        voluntario.save()  # Guarda el cambio en la base de datos
+
+        return redirect(administracionVoluntarios)
 
 
 

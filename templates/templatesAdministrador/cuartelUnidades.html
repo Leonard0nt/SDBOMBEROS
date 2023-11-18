@@ -187,7 +187,6 @@
                     <tr>
                         <th>Nomenclatura</th>
                         <th>Patente</th>
-                        <th>Disponibilidad</th>
                         <th>Especialidad</th>
                         <th>Comentario</th>
                     </tr>
@@ -197,11 +196,6 @@
                 <tr>
                     <th>{{unidad.nomenclatura}}</th>
                     <th>{{unidad.patente}}</th>
-                    {% if unidad.estado_unidad %}
-                        <th>Disponible</th>
-                    {% else %}
-                        <th>No-disponible</th>
-                    {% endif %}
                     <th>{{unidad.especialidad}}</th>              
                     <th>{{unidad.comentario}}</th>
                 </tr>

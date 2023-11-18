@@ -167,7 +167,7 @@
                             </svg>
                             Listar voluntarios 
                         </a>
-                    </li>
+                    </li>                    
                 </form>
                 <form method="POST">
                     <li>
@@ -184,8 +184,13 @@
         <div class="b-example-divider b-example-vr"></div>
 
         <div class="container mt-5">
-            <h1>Voluntarios Disponibles: {{cuartel.voluntarios_in}}</h1>
-            <h1>Unidades Disponibles: {{cuartel.unidades_in}}</h1>      
+            <h1 style="text-align: center;  padding: 10px; color: red">{{cuartel.nombre_cuartel}}</h1>
+            <br>
+            <h2 style="display:inline">Dirección:</h2>&nbsp;<h2 style="color: red; display: inline;">{{cuartel.direccionCuartel}}</h2>
+            <br><br><br>
+            <h1 style="display:inline">Voluntarios Disponibles:</h1>&nbsp;<h1 style="color: red; display: inline;">{{cuartel.voluntarios_in}}</h1>
+            <br><br>
+            <h1 style="display:inline">Unidades Disponibles:</h1>&nbsp;<h1 style="color: red; display: inline;">{{cuartel.unidades_in}}</h1>   
         </div>
     </main>
     <footer class="text-body-secondary py-5">
