@@ -24,7 +24,7 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('voluntario/', viewVoluntario.homeVoluntarios, name="voluntario"),
-    path('administrador/', viewAdm.homeAdm),
+    path('administrador/', viewAdm.homeAdm, name = "administrador"),
     path('actualizar_estado_voluntario/', viewVoluntario.actualizar_estado_voluntario, name='actualizar_estado_voluntario'),
     path('actualizar_disp_cuart/', viewVoluntario.actualizar_disp_cuart, name='actualizar_disp_cuart'),
     path('administrarCuartel/<int:idCuartel>/', viewAdm.homeAdmCuartel, name='administrarCuartel'),
@@ -44,5 +44,7 @@ urlpatterns = [
     path('cambiar_password_vol/<str:rut>/', viewAdm.cambiar_password_vol, name='cambiar_password_vol'),
     path('editar_unidadADM/<str:nomenclatura>/', viewAdm.editar_unidadADM, name='editar_unidadADM'),
     path('eliminar_unidadADM/<str:nomenclatura>/', viewAdm.eliminar_unidadADM, name='eliminar_unidadADM'),
+    path('emergencias/', viewAdm.admEmergencias, name = "emergencias"),
+    path('emergenciaInfo/<int:id_emergencia>/', viewAdm.emergenciasDetalle, name='emergenciaInfo'),
     path('', viewAdm.CustomLoginView.as_view(), name = 'login'),
 ]

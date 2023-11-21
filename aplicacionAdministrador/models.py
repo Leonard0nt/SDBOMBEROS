@@ -33,6 +33,7 @@ class cuarteles(models.Model):
     direccionCuartel = models.TextField(default="")
     voluntarios_in = models.IntegerField(default=0)
     unidades_in = models.IntegerField(default=0)
+    conductores_in = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return self.nombre_cuartel
@@ -59,7 +60,7 @@ class voluntarios(AbstractUser):
     estado = models.BooleanField(default=False)
     direccion = models.TextField(blank=True,default='')
     conductor = models.BooleanField(default=False)
-    unidad_asignada = models.CharField(max_length=4, default=0)
+    unidad_asignada = models.CharField(max_length = 5, default = '')
 
    
 
@@ -76,16 +77,32 @@ class voluntarios(AbstractUser):
 
 
 class unidades(models.Model):
-    nomenclatura = models.CharField(primary_key=True, null=False, max_length=4)
+    nomenclatura = models.CharField(primary_key=True, null=False, max_length=5)
     patente = models.CharField(max_length=8)
     estado_unidad = models.BooleanField(default=True)
     especialidad = models.CharField(max_length=15)
     comentario = models.TextField()
     cuartel_actual_uni = models.ForeignKey(cuarteles,default=0, on_delete=models.SET_DEFAULT)
+    emergencia_atendida = models.IntegerField(default = 0)
 
     
     def __str__(self) -> str:
         return self.nomenclatura
+
+
+class emergencias(models.Model):
+    id_emergencia = models.AutoField(primary_key=True)
+    clave = models.CharField(max_length = 15, default = 0)
+    direccion_emergencia = models.TextField()
+    voluntarios_in_emer = models.IntegerField(default = 0)
+    unidades_in_emer = models.IntegerField(default = 0)
+    fecha_emergencia = models.DateField(auto_now_add=True)
+    comentarioEmergencia = models.TextField(default='')
+
+    def __str__(self) -> str:
+        return self.id_emergencia
+
+
 
     
 

@@ -10,6 +10,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.views import LoginView
 # Create your views here.
 
+
 @login_required
 def homeAdm(request):
     VoluntarioBuscado = request.user
@@ -18,6 +19,7 @@ def homeAdm(request):
     for cuartel in cuartelesBuscado:
        cuartel.voluntarios_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ).count()
        cuartel.unidades_in = unidades.objects.filter(cuartel_actual_uni = cuartel.idCuartel, estado_unidad = True).count()
+       cuartel.conductores_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ,conductor = True).count()
 
     contexto = {
     'voluntario': VoluntarioBuscado,
@@ -199,3 +201,30 @@ def eliminar_unidadADM(request,nomenclatura):
     unidad.delete()
 
     return redirect(administracionUnidades)
+
+def admEmergencias(request):
+    voluntariosEmer = voluntarios.objects.all()
+    cuartelesEmer = cuarteles.objects.all()
+    unidadesEmer = unidades.objects.all()
+    emergenciasEmer = emergencias.objects.all()
+
+    data = {
+        'voluntarios': voluntariosEmer,
+        'Cuarteles': unidadesEmer,
+        'unidades': unidadesEmer,
+        'emergencias' : emergenciasEmer,
+    }
+    return render(request, '../templates/templatesAdministrador/emergencias.html',data)
+
+def emergenciasDetalle(request,id_emergencia):
+    emergencia = emergencias.objects.get(id_emergencia = id_emergencia)
+    unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
+    voluntariosEmer = voluntarios.objects.all()
+
+
+    data = {
+        'voluntarios': voluntariosEmer,
+        'unidades': unidadesEmer,
+        'emergencia' : emergencia,
+    }
+    return render(request, '../templates/templatesAdministrador/emergenciasDetalles.html',data)

@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+
 <html lang="es" data-bs-theme="auto">
 
 <head>
@@ -172,7 +173,7 @@
             </li>
 
             <li>
-                <a href="{% url 'editar_voluntario' voluntario.rut %}" class="nav-link text-dark">
+                <a href="{% url 'editar_voluntario'  voluntario.rut %}" class="nav-link text-dark">
                     <svg class="bi pe-none ms-2" width="16" height="16">
                         <use xlink:href="#grid" />
                     </svg>
@@ -241,9 +242,9 @@
                     <div class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-1">
                         {% for cuartel in cuarteles %}
                         <div class="col">
-                            <div class="card mb-4">
+                            <div class="card mb-4 h-100">
                                 {% if voluntario.cuartel_actual_vol.idCuartel == cuartel.idCuartel %}
-                                <div class="card-body text-center border border-success border border-2">
+                                <div class="card-body text-center border border-success border border-2 d-flex flex-column align-items-center justify-content-center">
                                     <input type="radio" class="btn-check" name="cuartelActual"
                                         id="{{cuartel.idCuartel}}" autocomplete="off" value={{cuartel.idCuartel}}
                                         checked>
@@ -251,7 +252,7 @@
                                         for="{{cuartel.idCuartel}}">{{cuartel.nombre_cuartel}}</label>
                                 </div>
                                 {% else %}
-                                <div class="card-body text-center border border-danger border border-2">
+                                <div class="card-body text-center border border-danger border border-2 d-flex flex-column align-items-center justify-content-center">
                                     <input type="radio" class="btn-check text-center" name="cuartelActual"
                                         id="{{cuartel.idCuartel}}" autocomplete="off" value={{cuartel.idCuartel}}>
                                     <label class="btn btn-outline-danger"

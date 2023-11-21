@@ -181,7 +181,14 @@
                         Lista Unidades
                     </a>
                 </li>
-
+                <li>
+                    <a href="/emergencias" class="nav-link text-dark" >
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#grid" />
+                        </svg>
+                        Emergencias
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="b-example-divider b-example-vr"></div>
@@ -200,7 +207,6 @@
                         <th>Disp..</th>
                         <th>n° registro</th>
                         <th>Conductor</th>
-                        <th>unidad</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -224,7 +230,6 @@
                         {% else %}
                         <th>No</th>
                         {% endif %}
-                        <th>{{voluntario.unidad_asignada}}</th>
                         <th>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#editarVoluntarioModal{{ voluntario.rut }}">
