@@ -204,10 +204,9 @@
                         </div>
                         <div class="col">
                             <p class="float-end">
-                                <button type="button" class="btn btn-warning py-2" style="margin-right: 60px;" data-bs-toggle="modal"
-                                    data-bs-target="#eliminarVoluntarioModal{{ voluntario.rut }}">
+                                <a type="button" class="btn btn-warning py-2" style="margin-right: 60px;" href="{% url 'agregarEmergencia'%}">
                                     Organizar nueva emergencia
-                                </button>
+                                </a>
                             </p>
                         </div>
                     </div>
@@ -237,10 +236,9 @@
                                 </a>
                             </th>
                             <th>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#eliminarVoluntarioModal{{ emergencia.id_emergencia}}">
+                                <a type="button" class="btn btn-danger" href="{% url 'emergenciasCompletar' emergencia.id_emergencia%}">
                                     Completar
-                                </button>
+                                </a>
                             </th>
     
                         </tr>

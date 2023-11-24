@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from aplicacionAdministrador.models import *
-from .formsAdministrador.formsAdm import VoluntarioForm, UnidadForm
+from .formsAdministrador.formsAdm import VoluntarioForm, UnidadForm, EmergenciaForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from aplicacionVoluntarios import views as viewsVoluntario
@@ -204,22 +204,54 @@ def eliminar_unidadADM(request,nomenclatura):
 
 def admEmergencias(request):
     voluntariosEmer = voluntarios.objects.all()
-    cuartelesEmer = cuarteles.objects.all()
     unidadesEmer = unidades.objects.all()
-    emergenciasEmer = emergencias.objects.all()
+    emergenciasEmer = emergencias.objects.filter(EmergenciaActiva = True)
 
     data = {
         'voluntarios': voluntariosEmer,
-        'Cuarteles': unidadesEmer,
         'unidades': unidadesEmer,
         'emergencias' : emergenciasEmer,
     }
     return render(request, '../templates/templatesAdministrador/emergencias.html',data)
 
+def admOrganizarEmergencias(request,id_emergencia):
+    voluntariosEmer = voluntarios.objects.filter(estado = True)
+    cuartelesEmer = cuarteles.objects.all()
+    for cuartel in cuartelesEmer:
+       cuartel.voluntarios_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ).count()
+       cuartel.unidades_in = unidades.objects.filter(cuartel_actual_uni = cuartel.idCuartel, estado_unidad = True).count()
+       cuartel.conductores_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ,conductor = True).count()
+    
+    unidadesEmer = unidades.objects.filter(estado_unidad = True)
+
+    data = {
+        'voluntarios': voluntariosEmer,
+        'cuarteles': cuartelesEmer,
+        'unidades': unidadesEmer,
+    }
+    return render(request, '../templates/templatesAdministrador/organizarEmergencia.html',data)
+
+def admEmergenciaDatos(request):
+    if request.method == 'POST':
+        form = EmergenciaForm(request.POST)
+        if form.is_valid():
+            emergencia = form.save()
+        return admOrganizarEmergencias(request, emergencia.id_emergencia)
+    else:
+        form = EmergenciaForm()
+
+    return render(request, '../templates/templatesAdministrador/emergenciaDatos.html', {'form': form})
+
+
 def emergenciasDetalle(request,id_emergencia):
     emergencia = emergencias.objects.get(id_emergencia = id_emergencia)
     unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
-    voluntariosEmer = voluntarios.objects.all()
+    
+    unidadesID = []
+    for unidad in unidadesEmer:
+        unidadesID.append(unidad.nomenclatura)
+
+    voluntariosEmer = voluntarios.objects.filter(unidad_asignada__in=unidadesID)
 
 
     data = {
@@ -228,3 +260,28 @@ def emergenciasDetalle(request,id_emergencia):
         'emergencia' : emergencia,
     }
     return render(request, '../templates/templatesAdministrador/emergenciasDetalles.html',data)
+
+def emergenciasCompletar(request,id_emergencia):
+    emergencia = emergencias.objects.get(id_emergencia = id_emergencia)
+    unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
+    
+    unidadesID = []
+    for unidad in unidadesEmer:
+        unidadesID.append(unidad.nomenclatura)
+
+    voluntariosEmer = voluntarios.objects.filter(unidad_asignada__in = unidadesID)
+
+    for voluntario in voluntariosEmer:
+        voluntario.unidad_asignada = ''
+        voluntario.save()
+
+    emergencia.EmergenciaActiva = False
+    emergencia.save()
+
+    for unidad in unidadesEmer:
+        unidad.estado_unidad = True
+        unidad.estado_unidad = True
+        unidad.emergencia_atendida = 0
+        unidad.save()
+
+    return redirect(admEmergencias)

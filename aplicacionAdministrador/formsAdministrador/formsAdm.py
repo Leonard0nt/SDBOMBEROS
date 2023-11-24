@@ -1,5 +1,5 @@
 from django import forms
-from aplicacionAdministrador.models import voluntarios, cuarteles, unidades # Asegúrate de importar tu modelo Voluntario y cualquier otro modelo necesario
+from aplicacionAdministrador.models import voluntarios, cuarteles, unidades, emergencias # Asegúrate de importar tu modelo Voluntario y cualquier otro modelo necesario
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
@@ -55,12 +55,29 @@ class VoluntarioForm(forms.ModelForm):
 class UnidadForm(forms.ModelForm):
     class Meta:
         model = unidades
-        fields = ['nomenclatura','patente','especialidad','cuartel_actual_uni','comentario']  # Utiliza '__all__' para incluir todos los campos del modelo en el formulario
+        fields = ['nomenclatura','patente','especialidad','cuartel_actual_uni','comentario']  
         cuartel_actual_uni = forms.ModelChoiceField(queryset=cuarteles.objects.all(), required=True)
     # Agrega un widget para el campo 'comentario' para que sea un textarea
         widgets = {
             'comentario': forms.Textarea(attrs={'rows': 2}),
         }
+
+class EmergenciaForm(forms.ModelForm):
+    class Meta:
+        model = emergencias
+        fields = ['clave','direccion_emergencia','comentarioEmergencia']
+
+        widgets = {
+            'comentarioEmergencia': forms.Textarea(attrs={'rows': 2}),
+            'direccion_emergencia': forms.Textarea(attrs={'rows': 2}), 
+        }
+
+        labels = {
+        'direccion_emergencia': 'Direccion',
+        'comentarioEmergencia': 'Comentario',
+        }
+
+
 
 
 

@@ -98,6 +98,7 @@ class emergencias(models.Model):
     unidades_in_emer = models.IntegerField(default = 0)
     fecha_emergencia = models.DateField(auto_now_add=True)
     comentarioEmergencia = models.TextField(default='')
+    EmergenciaActiva = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return self.id_emergencia
