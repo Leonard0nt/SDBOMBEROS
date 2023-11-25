@@ -96,7 +96,7 @@ class emergencias(models.Model):
     direccion_emergencia = models.TextField()
     voluntarios_in_emer = models.IntegerField(default = 0)
     unidades_in_emer = models.IntegerField(default = 0)
-    fecha_emergencia = models.DateField(auto_now_add=True)
+    fecha_emergencia = models.DateTimeField(auto_now_add=True)
     comentarioEmergencia = models.TextField(default='')
     EmergenciaActiva = models.BooleanField(default=True)
 

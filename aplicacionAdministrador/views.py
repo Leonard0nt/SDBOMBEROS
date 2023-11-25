@@ -215,6 +215,38 @@ def admEmergencias(request):
     return render(request, '../templates/templatesAdministrador/emergencias.html',data)
 
 def admOrganizarEmergencias(request,id_emergencia):
+    emergenciaEmer = id_emergencia
+    voluntariosEmer = voluntarios.objects.filter(estado = True)
+    cuartelesEmer = cuarteles.objects.all()
+
+    for cuartel in cuartelesEmer:
+       cuartel.voluntarios_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ).count()
+       cuartel.unidades_in = unidades.objects.filter(cuartel_actual_uni = cuartel.idCuartel, estado_unidad = True).count()
+       cuartel.conductores_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ,conductor = True).count()
+    
+    unidadesEmer = unidades.objects.filter(estado_unidad = True)
+
+    data = {
+        'voluntarios': voluntariosEmer,
+        'cuarteles': cuartelesEmer,
+        'unidades': unidadesEmer,
+        'emergencia': emergenciaEmer
+    }
+    return render(request, '../templates/templatesAdministrador/organizarEmergencia.html',data)
+
+def admEmergenciaDatos(request):
+    if request.method == 'POST':
+        form = EmergenciaForm(request.POST)
+        if form.is_valid():
+            emergencia = form.save()
+            # Redirigir a emergenciasDetalle con el ID de la nueva emergencia
+            return redirect('organizarEmergencia' ,id_emergencia=emergencia.id_emergencia)
+            
+    else:
+        form = EmergenciaForm()
+        
+        
+        
     voluntariosEmer = voluntarios.objects.filter(estado = True)
     cuartelesEmer = cuarteles.objects.all()
     for cuartel in cuartelesEmer:
@@ -229,18 +261,10 @@ def admOrganizarEmergencias(request,id_emergencia):
         'cuarteles': cuartelesEmer,
         'unidades': unidadesEmer,
     }
-    return render(request, '../templates/templatesAdministrador/organizarEmergencia.html',data)
+    
 
-def admEmergenciaDatos(request):
-    if request.method == 'POST':
-        form = EmergenciaForm(request.POST)
-        if form.is_valid():
-            emergencia = form.save()
-        return admOrganizarEmergencias(request, emergencia.id_emergencia)
-    else:
-        form = EmergenciaForm()
 
-    return render(request, '../templates/templatesAdministrador/emergenciaDatos.html', {'form': form})
+    return render(request, '../templates/templatesAdministrador/emergenciaDatos.html', {'form': form, **data})
 
 
 def emergenciasDetalle(request,id_emergencia):
@@ -273,6 +297,7 @@ def emergenciasCompletar(request,id_emergencia):
 
     for voluntario in voluntariosEmer:
         voluntario.unidad_asignada = ''
+        voluntario.estado = True
         voluntario.save()
 
     emergencia.EmergenciaActiva = False
@@ -285,3 +310,41 @@ def emergenciasCompletar(request,id_emergencia):
         unidad.save()
 
     return redirect(admEmergencias)
+
+
+def asignarAUnidades(request, nomenclatura, id_emergencia):
+    unidad = unidades.objects.get(nomenclatura=nomenclatura)
+    unidad.estado_unidad = False 
+    unidad.emergencia_atendida = id_emergencia
+    unidad.save()
+
+    if request.method == 'POST':
+        ruts_seleccionados = request.POST.getlist('SelectVoluntarios')
+        for rut in ruts_seleccionados:
+            voluntario = voluntarios.objects.get(rut=rut)
+            voluntario.unidad_asignada = nomenclatura
+            voluntario.estado = False
+            voluntario.save()
+    
+    return redirect(admOrganizarEmergencias, id_emergencia=id_emergencia)
+
+def despachar(request,id_emergencia):
+    emergencia = emergencias.objects.get(id_emergencia=id_emergencia)
+    unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
+    unidadesID = []
+    for unidad in unidadesEmer:
+        unidadesID.append(unidad.nomenclatura)
+
+    voluntariosEmer = voluntarios.objects.filter(unidad_asignada__in=unidadesID).count()
+
+    emergencia.unidades_in_emer = unidades.objects.filter(emergencia_atendida = id_emergencia).count()
+    emergencia.voluntarios_in_emer = voluntariosEmer
+    emergencia.save()
+
+    return redirect(admEmergencias)
+
+
+    
+
+        
+    

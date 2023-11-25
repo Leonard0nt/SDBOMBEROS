@@ -47,7 +47,9 @@ urlpatterns = [
     path('emergencias/', viewAdm.admEmergencias, name = "emergencias"),
     path('emergenciaInfo/<int:id_emergencia>/', viewAdm.emergenciasDetalle, name='emergenciaInfo'),
     path('emergenciasCompletar/<int:id_emergencia>/', viewAdm.emergenciasCompletar, name='emergenciasCompletar'),
-    path('organizarEmergencia/', viewAdm.admOrganizarEmergencias, name='organizarEmergencia'),
+    path('organizarEmergencia/<int:id_emergencia>/', viewAdm.admOrganizarEmergencias, name='organizarEmergencia'),
     path('agregarEmergencia/', viewAdm.admEmergenciaDatos, name = 'agregarEmergencia'),
+    path('asignarAUnidades/<str:nomenclatura>/<int:id_emergencia>/', viewAdm.asignarAUnidades, name = 'asignarAUnidades'),
+    path('despachar/<int:id_emergencia>/', viewAdm.despachar, name = 'despachar'),
     path('', viewAdm.CustomLoginView.as_view(), name = 'login'),
 ]
