@@ -2,12 +2,16 @@ from django.shortcuts import render,redirect, get_object_or_404
 from aplicacionAdministrador.models import *
 from .formsAdministrador.formsAdm import VoluntarioForm, UnidadForm, EmergenciaForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.urls import reverse_lazy
 from django.contrib.auth import login, authenticate
 from aplicacionVoluntarios import views as viewsVoluntario
 from django.http import JsonResponse
 from django import forms
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.views import LoginView
+
+
 # Create your views here.
 
 
@@ -104,9 +108,11 @@ def agregarVoluntario(request):
         form = VoluntarioForm(request.POST)
         if form.is_valid():
             form.save()
-        return homeAdm(request)
-    data = {'form':form}
-    return render(request, '../templates/templatesAdministrador/agregarVoluntario.html',data)
+            return homeAdm(request)
+    else:
+        form = VoluntarioForm()
+    
+    return render(request, '../templates/templatesAdministrador/agregarVoluntario.html',{'form':form})
 
 
 def login(request):
@@ -114,6 +120,7 @@ def login(request):
 
 class CustomLoginView(LoginView):
     template_name = '../templates/iniciarSesion.html'  # Ajusta según tu estructura de carpetas
+    success_url = reverse_lazy('/')  # Ajusta según tu URL de redirección exitosa
 
     def get_success_url(self):
         # Verifica si el usuario es administrador y redirige en consecuencia
@@ -123,6 +130,13 @@ class CustomLoginView(LoginView):
             else:
                 return '/voluntario/'  # Ajusta según tu URL de voluntario
         return '/'
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if not any(message.tags == messages.ERROR for message in messages.get_messages(self.request)):
+            messages.error(self.request, 'Credenciales incorrectas. Por favor, inténtalo de nuevo.')  # Mensaje de error
+        return response
+    
 
 
 def agregarUnidad(request):
@@ -344,7 +358,24 @@ def despachar(request,id_emergencia):
     return redirect(admEmergencias)
 
 
-    
+def generate_pdf(request):
+    emergenciaEmer = emergencias.objects.all()
+    # Obtén los datos que quieres mostrar en el PDF
+    data = {
+        emergenciaEmer
+        # Agrega más datos según sea necesario
+    }
+
+    # Renderiza la plantilla a HTML
+    template = get_template('generarPdf.html')
+    html = template.render(data)
+
+    # Crea un objeto HTML de WeasyPrint
+    response = HttpResponse(content_type='application/pdf')
+    HTML(string=html).write_pdf(response)
+
+    return response
+
 
         
     

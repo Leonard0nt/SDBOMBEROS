@@ -96,12 +96,14 @@
     .bd-mode-toggle .dropdown-menu .active .bi {
       display: block !important;
     }
+
     /* Agrega estilos según tus preferencias */
 
 
     .login-title {
       text-align: center;
     }
+
     .form-signin {
       display: flex;
       align-items: center;
@@ -111,63 +113,69 @@
 
     /* Estilos adicionales según necesidades */
     .btn {
-        background-color: red;
-        color: #fff;
-        padding: 8px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 200px;
-   
-        
+      background-color: red;
+      color: #fff;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+
+
     }
 
     .btn:hover {
-        background-color: black;
+      background-color: black;
     }
+
     /* Estilos generales */
     body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        align-items: center;
-        justify-content: center;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      align-items: center;
+      justify-content: center;
     }
-    #imagenInicio {
-      width: 100%; /* La imagen ocupa el 100% del ancho del contenedor */
-      max-width: 100%; /* La imagen no debe exceder el 100% del ancho del contenedor */
-      height: auto; /* La altura se ajusta automáticamente para mantener la proporción */
 
-      margin: 0 auto; /* Centra horizontalmente en dispositivos de escritorio */
+    #imagenInicio {
+      width: 100%;
+      /* La imagen ocupa el 100% del ancho del contenedor */
+      max-width: 100%;
+      /* La imagen no debe exceder el 100% del ancho del contenedor */
+      height: auto;
+      /* La altura se ajusta automáticamente para mantener la proporción */
+
+      margin: 0 auto;
+      /* Centra horizontalmente en dispositivos de escritorio */
 
       /* Ajusta el tamaño de la imagen en dispositivos móviles según sea necesario */
       @media (max-width: 767px) {
-          width: 100vw; /* La imagen ocupa el 100% del ancho de la ventana en dispositivos móviles */
-          height: auto; /* La altura se ajusta automáticamente para mantener la proporción */
-          margin: 0; /* Elimina los márgenes en dispositivos móviles */
+        width: 100vw;
+        /* La imagen ocupa el 100% del ancho de la ventana en dispositivos móviles */
+        height: auto;
+        /* La altura se ajusta automáticamente para mantener la proporción */
+        margin: 0;
+        /* Elimina los márgenes en dispositivos móviles */
       }
     }
-    input{  
-    border: 2px solid red; /* Color del borde */
-    border-radius: 8px; /* Bordes redondeados */
-    padding: 8px; /* Espaciado interno */
-    width: 100%; /* Ocupar el ancho completo del contenedor */
-    box-sizing: border-box; /* Incluye el padding en el ancho total */
-    
+
+    input {
+      border: 2px solid red;
+      /* Color del borde */
+      border-radius: 8px;
+      /* Bordes redondeados */
+      padding: 8px;
+      /* Espaciado interno */
+      width: 100%;
+      /* Ocupar el ancho completo del contenedor */
+      box-sizing: border-box;
+      /* Incluye el padding en el ancho total */
+
     }
-
-
-
-
-
-
-
-
-
-</style>
+  </style>
 
 </head>
 
@@ -193,44 +201,50 @@
   </svg>
 
 
-<!-- login.html -->
-<div class="container">
-  <main class="form-signin ">
+  <!-- login.html -->
+  <div class="container">
+    <main class="form-signin ">
       <div class="login-container">
-          <img id="imagenInicio" class="" src="{% static '../static/BomberosInicio.jpg' %}" alt="" width="300" height="200">
-          <h2 class="login-title">Iniciar Sesión</h2>
-          <form method="post" action="{% url 'login' %}" class="login-form">
-              {% csrf_token %}
-              
-              <div class="mb-1 row">
-                  <div class="col-12">
-                      <label for="{{ form.username.id_for_label }}" class="form-label">Rut:</label>
-                  </div>
-              </div>
-              <div class="mb-3 row">
-                <div class="col-12">
-                    {{ form.username }}
-                </div>
-              </div>
-              <div class="mb-1 row">
-                  <div class="col-12">
-                      <label for="{{ form.password.id_for_label }}" class="form-label">Contraseña: </label>
-                  </div>
-              </div>
-              <div class="mb-3 row">
-                <div class="col-12">
-                    {{ form.password }}
-                </div>
-              </div>
-              
-              <button type="submit" class="btn btn-primary mt-4 mx-auto">Iniciar Sesión</button>
-          </form>
+        <img id="imagenInicio" class="" src="{% static '../static/BomberosInicio.jpg' %}" alt="" width="300"
+          height="200">
+        <h2 class="login-title">Iniciar Sesión</h2>
+        {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form method="post" action="{% url 'login' %}" class="login-form">
+          {% csrf_token %}
+
+          <div class="mb-1 row">
+            <div class="col-12">
+              <label for="{{ form.username.id_for_label }}" class="form-label">Rut:</label>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-12">
+              {{ form.username }}
+            </div>
+          </div>
+          <div class="mb-1 row">
+            <div class="col-12">
+              <label for="{{ form.password.id_for_label }}" class="form-label">Contraseña: </label>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-12">
+              {{ form.password }}
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-4 mx-auto">Iniciar Sesión</button>
+        </form>
       </div>
-  </main>
-</div>
-<script src="{% static 'aplicacionVoluntarios/js/bootstrap.bundle.min.js' %}"></script>
+    </main>
+  </div>
+  <script src="{% static 'aplicacionVoluntarios/js/bootstrap.bundle.min.js' %}"></script>
 </body>
+
 </html>
-
-
- 
