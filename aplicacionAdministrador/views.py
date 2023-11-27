@@ -6,10 +6,15 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib.auth import login, authenticate
 from aplicacionVoluntarios import views as viewsVoluntario
-from django.http import JsonResponse
+from django.http import HttpResponse
 from django import forms
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.views import LoginView
+
+from django.template.loader import render_to_string
+from django.template.loader import get_template
+
+from weasyprint import HTML
 
 
 # Create your views here.
@@ -360,14 +365,18 @@ def despachar(request,id_emergencia):
 
 def generate_pdf(request):
     emergenciaEmer = emergencias.objects.all()
+
+    logo_path = "../static/Bomberos.png"
+    
     # Obtén los datos que quieres mostrar en el PDF
     data = {
-        emergenciaEmer
+        'emergencias' : emergenciaEmer,
+        'logo_path' : logo_path,
         # Agrega más datos según sea necesario
     }
 
     # Renderiza la plantilla a HTML
-    template = get_template('generarPdf.html')
+    template = get_template('../templates/templatesAdministrador/generarPdf.html')
     html = template.render(data)
 
     # Crea un objeto HTML de WeasyPrint
