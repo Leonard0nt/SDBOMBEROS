@@ -12,6 +12,8 @@ from aplicacionVoluntarios.formsVoluntario.formsVolPass import ContrasenaEditFor
 # Create your views here.
 img = "../static/Bomberos.png" 
 
+
+# renderiza principal ventana de voluntarios
 @login_required    
 def homeVoluntarios(request):
     cuartelesBuscado= cuarteles.objects.all()
@@ -19,12 +21,14 @@ def homeVoluntarios(request):
     contexto = {'img': img,'voluntario':VoluntarioBuscado,'cuarteles': cuartelesBuscado,}
     return render(request,  "../templates/templatesVoluntario/indexVoluntario.html",contexto)
 
+# permite obtener todos los cuarteles para poder verlos y seleccionar uno
 def obtener_opciones_cuartel(request):
     cuarteles = cuarteles.objects.all()  # Obtengo todos los cuarteles en una variable
     data = [{'id': cuartel.idCuartel, 'nombre': cuartel.nombre_cuartel} for cuartel in cuarteles] #Extraigo el id y el nombre de cada cuartel 
     return JsonResponse(data, safe=False)
 
 
+# actualiza el estado del voluntario segun en que boton este clickeado 
 def actualizar_estado_voluntario(request):
     #cambio de estado
     if request.method == 'POST':
@@ -41,6 +45,8 @@ def actualizar_estado_voluntario(request):
 
         return redirect(homeVoluntarios)
     
+
+# luego de seleccionar actualiza el cuartel seleccionado
 def actualizar_cuartel_voluntario(request):
     #cambio de cuartel
     if request.method == 'POST':
@@ -53,7 +59,8 @@ def actualizar_cuartel_voluntario(request):
         voluntario.save() # guardo los cambios
 
         return redirect(homeVoluntarios)
-    
+ 
+# luego de seleccionar actualiza la disponibilidad seleccionada
 def actualizar_disp_cuart(request): # funcion que realiza el cambio de disponibilidad y cuartel a la vez
     actualizar_estado_voluntario(request)
     actualizar_cuartel_voluntario(request)
@@ -61,7 +68,7 @@ def actualizar_disp_cuart(request): # funcion que realiza el cambio de disponibi
     return redirect(homeVoluntarios)
 
 
-    
+# devuelve principales datos del cuartel actual seleccionado
 def verCuartelActual(request,idCuartel):
     idCuartell = idCuartel
     VoluntarioBuscado = request.user
@@ -76,6 +83,7 @@ def verCuartelActual(request,idCuartel):
     return render(request, "../templates/templatesVoluntario/cuartelActualInfo.html", contexto)
 
 
+# permite editar datos los cuales pueden ser editados por el propio usuario
 def edit_voluntario(request, rut):
     voluntario = get_object_or_404(voluntarios, rut=rut)
     
@@ -89,7 +97,7 @@ def edit_voluntario(request, rut):
 
     return render(request, '../templates/templatesVoluntario/configPerfil.html', {'form': form, 'voluntario': voluntario})
 
-
+# permite editar contrasena 
 def edit_contrasena(request, rut):
     voluntario = get_object_or_404(voluntarios, rut=rut)
     

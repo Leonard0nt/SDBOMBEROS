@@ -20,23 +20,29 @@ from weasyprint import HTML
 # Create your views here.
 
 
+# generar la ventana principal del administrador
 @login_required
 def homeAdm(request):
     VoluntarioBuscado = request.user
-    cuartelesBuscado= cuarteles.objects.all()
-    img = "../static/Bomberos.png"
-    for cuartel in cuartelesBuscado:
-       cuartel.voluntarios_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ).count()
-       cuartel.unidades_in = unidades.objects.filter(cuartel_actual_uni = cuartel.idCuartel, estado_unidad = True).count()
-       cuartel.conductores_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ,conductor = True).count()
+    if VoluntarioBuscado.is_staff:
+        cuartelesBuscado= cuarteles.objects.all()
+        img = "../static/Bomberos.png"
+        for cuartel in cuartelesBuscado:
+           cuartel.voluntarios_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ).count()
+           cuartel.unidades_in = unidades.objects.filter(cuartel_actual_uni = cuartel.idCuartel, estado_unidad = True).count()
+           cuartel.conductores_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ,conductor = True).count()
 
-    contexto = {
-    'voluntario': VoluntarioBuscado,
-    'cuarteles': cuartelesBuscado,
-    'img': img,
-    }
-    return render(request, "../templates/templatesAdministrador/indexAdm.html", contexto)
+        contexto = {
+        'voluntario': VoluntarioBuscado,
+        'cuarteles': cuartelesBuscado,
+        'img': img,
+        }
+        return render(request, "../templates/templatesAdministrador/indexAdm.html", contexto)
+    else:
+        return redirect('login')
 
+
+# generar la pantalla que muestra la informacion al seleccionar un cuartel
 @login_required
 def homeAdmCuartel(request,idCuartel):
     idCuartell = idCuartel
@@ -50,6 +56,8 @@ def homeAdmCuartel(request,idCuartel):
         }
     return render(request, "../templates/templatesAdministrador/indexAdmCuartel.html", contexto)
 
+
+# genera un ventana que muestra una lista con los voluntarios DISPONIBLES en el cuartel
 @login_required
 def homeAdmCuartelVoluntarios(request,idCuartel):
     idCuartell = idCuartel
@@ -64,17 +72,23 @@ def homeAdmCuartelVoluntarios(request,idCuartel):
         }
     return render(request, "../templates/templatesAdministrador/cuartelVoluntarios.html", contexto)
 
+
+# devuelve una lista con todos los voluntarios esten o no disponibles
 @login_required
 def administracionVoluntarios(request):
     adm = request.user
-    voluntarios_list = voluntarios.objects.filter(is_staff=False)
-    
-    contexto = {
-        'adm': adm,
-        'voluntarios_list': voluntarios_list,
-        }
-    return render(request, "../templates/templatesAdministrador/administracionVoluntarios.html", contexto)
+    if adm.is_staff:
+        voluntarios_list = voluntarios.objects.filter(is_staff=False)
 
+        contexto = {
+            'adm': adm,
+            'voluntarios_list': voluntarios_list,
+            }
+        return render(request, "../templates/templatesAdministrador/administracionVoluntarios.html", contexto)
+    else:
+        return redirect('login')
+
+# devuelve una lista de las unidades DISPONIBLES en el cuartel seleccionado
 @login_required
 def homeAdmCuartelUnidades(request,idCuartel):
     idCuartell = idCuartel
@@ -91,33 +105,42 @@ def homeAdmCuartelUnidades(request,idCuartel):
         }
     return render(request, "../templates/templatesAdministrador/cuartelUnidades.html", contexto)
 
+# devuelve una lista con todas las unidades esten o no disponibles
 @login_required
 def administracionUnidades(request):
-    cuartelesUni = cuarteles.objects.all()
-    img = "../static/Bomberos.png"
     adm = request.user
-    unidadesAdm = unidades.objects.all()
-    
-    contexto = {
-        'cuarteles': cuartelesUni,
-        'voluntario': adm,
-        'unidadesAdm': unidadesAdm,
-        'img' : img,
-        }
-    return render(request, "../templates/templatesAdministrador/administracionUnidades.html", contexto)
+    if adm.is_staff:
+        cuartelesUni = cuarteles.objects.all()
+        img = "../static/Bomberos.png"
+        unidadesAdm = unidades.objects.all()
 
+        contexto = {
+            'cuarteles': cuartelesUni,
+            'voluntario': adm,
+            'unidadesAdm': unidadesAdm,
+            'img' : img,
+            }
+        return render(request, "../templates/templatesAdministrador/administracionUnidades.html", contexto)
+    else:
+        return redirect('login')
+
+# ventana que permite agregar nuevos voluntarios tanto como perfil como instancia
 @login_required
 def agregarVoluntario(request):
-    form = VoluntarioForm()
-    if request.method == 'POST':
-        form = VoluntarioForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return homeAdm(request)
-    else:
+    adm = request.user
+    if adm.is_staff:
         form = VoluntarioForm()
-    
-    return render(request, '../templates/templatesAdministrador/agregarVoluntario.html',{'form':form})
+        if request.method == 'POST':
+            form = VoluntarioForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return homeAdm(request)
+        else:
+            form = VoluntarioForm()
+
+        return render(request, '../templates/templatesAdministrador/agregarVoluntario.html',{'form':form})
+    else:
+        return redirect('login')
 
 
 def login(request):
@@ -143,19 +166,24 @@ class CustomLoginView(LoginView):
         return response
     
 
-
+# permite registrar nuevas unidades al sistema
 def agregarUnidad(request):
-    if request.method == 'POST':
-        form = UnidadForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return homeAdm(request)
+    adm = request.user
+    if adm.is_staff:
+        if request.method == 'POST':
+            form = UnidadForm(request.POST)
+            if form.is_valid():
+                form.save()
+            return homeAdm(request)
+        else:
+            form = UnidadForm()
+
+        return render(request, '../templates/templatesAdministrador/agregarUnidad.html', {'form': form})
     else:
-        form = UnidadForm()
-
-    return render(request, '../templates/templatesAdministrador/agregarUnidad.html', {'form': form})
+        return redirect('login')
 
 
+# ventana que permite editar datos de un voluntario
 def editar_voluntarioADM(request, rut):
     voluntario = get_object_or_404(voluntarios, rut=rut)
     
@@ -177,7 +205,7 @@ def editar_voluntarioADM(request, rut):
         return redirect(administracionVoluntarios)
 
 
-
+# opcion que elimina a un voluntario del sistema
 def eliminar_voluntario(request, rut):
     voluntario = get_object_or_404(voluntarios, rut=rut)
     
@@ -185,7 +213,7 @@ def eliminar_voluntario(request, rut):
 
     return redirect(administracionVoluntarios)
 
-
+# ventana que permite cambiar la contrasena del voluntario en caso de perdida
 def cambiar_password_vol(request,rut):
     voluntario = get_object_or_404(voluntarios, rut=rut)
 
@@ -195,6 +223,7 @@ def cambiar_password_vol(request,rut):
     
     return redirect(administracionVoluntarios)
 
+# permite editar datos de las unidades como su disponibilidad
 def editar_unidadADM(request, nomenclatura):
     unidad = get_object_or_404(unidades, nomenclatura=nomenclatura)
 
@@ -214,6 +243,7 @@ def editar_unidadADM(request, nomenclatura):
 
         return redirect(administracionUnidades)
 
+# permite eliminar unidades en caso necesario
 def eliminar_unidadADM(request,nomenclatura):
     unidad = get_object_or_404(unidades, nomenclatura=nomenclatura)
 
@@ -221,17 +251,25 @@ def eliminar_unidadADM(request,nomenclatura):
 
     return redirect(administracionUnidades)
 
+# ventana que muestra una lista de emergencias activas
 def admEmergencias(request):
-    voluntariosEmer = voluntarios.objects.all()
-    unidadesEmer = unidades.objects.all()
-    emergenciasEmer = emergencias.objects.filter(EmergenciaActiva = True)
+    adm = request.user
+    if adm.is_staff:
+        voluntariosEmer = voluntarios.objects.all()
+        unidadesEmer = unidades.objects.all()
+        emergenciasEmer = emergencias.objects.filter(EmergenciaActiva = True)
 
-    data = {
-        'voluntarios': voluntariosEmer,
-        'unidades': unidadesEmer,
-        'emergencias' : emergenciasEmer,
-    }
-    return render(request, '../templates/templatesAdministrador/emergencias.html',data)
+        data = {
+            'voluntarios': voluntariosEmer,
+            'unidades': unidadesEmer,
+            'emergencias' : emergenciasEmer,
+        }
+        return render(request, '../templates/templatesAdministrador/emergencias.html',data)
+    else:
+        return redirect('login')
+
+# ventana de asignacion de emergencias, se encarga de listar las unidades y voluntarios 
+# disponbiles tambien se encarga de llevar un conteo de los recursos asociados a la emergencia
 
 def admOrganizarEmergencias(request,id_emergencia):
     emergenciaEmer = id_emergencia
@@ -253,39 +291,44 @@ def admOrganizarEmergencias(request,id_emergencia):
     }
     return render(request, '../templates/templatesAdministrador/organizarEmergencia.html',data)
 
+# ventana numero uno en creacion de emergencias se ingresan datos de "primer grado" como la clave, direccion, etc
 def admEmergenciaDatos(request):
-    if request.method == 'POST':
-        form = EmergenciaForm(request.POST)
-        if form.is_valid():
-            emergencia = form.save()
-            # Redirigir a emergenciasDetalle con el ID de la nueva emergencia
-            return redirect('emergencias')
-            
+    adm = request.user
+    if adm.is_staff:
+        if request.method == 'POST':
+            form = EmergenciaForm(request.POST)
+            if form.is_valid():
+                emergencia = form.save()
+                return redirect('emergencias')
+
+        else:
+            form = EmergenciaForm()
+
+
+
+        voluntariosEmer = voluntarios.objects.filter(estado = True)
+        cuartelesEmer = cuarteles.objects.all()
+        for cuartel in cuartelesEmer:
+           cuartel.voluntarios_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ).count()
+           cuartel.unidades_in = unidades.objects.filter(cuartel_actual_uni = cuartel.idCuartel, estado_unidad = True).count()
+           cuartel.conductores_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ,conductor = True).count()
+
+        unidadesEmer = unidades.objects.filter(estado_unidad = True)
+
+        data = {
+            'voluntarios': voluntariosEmer,
+            'cuarteles': cuartelesEmer,
+            'unidades': unidadesEmer,
+        }
+
+
+
+        return render(request, '../templates/templatesAdministrador/emergenciaDatos.html', {'form': form, **data})
     else:
-        form = EmergenciaForm()
-        
-        
-        
-    voluntariosEmer = voluntarios.objects.filter(estado = True)
-    cuartelesEmer = cuarteles.objects.all()
-    for cuartel in cuartelesEmer:
-       cuartel.voluntarios_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ).count()
-       cuartel.unidades_in = unidades.objects.filter(cuartel_actual_uni = cuartel.idCuartel, estado_unidad = True).count()
-       cuartel.conductores_in = voluntarios.objects.filter(cuartel_actual_vol = cuartel.idCuartel, estado = True ,conductor = True).count()
-    
-    unidadesEmer = unidades.objects.filter(estado_unidad = True)
+        return redirect('login')
 
-    data = {
-        'voluntarios': voluntariosEmer,
-        'cuarteles': cuartelesEmer,
-        'unidades': unidadesEmer,
-    }
-    
-
-
-    return render(request, '../templates/templatesAdministrador/emergenciaDatos.html', {'form': form, **data})
-
-
+# lista los detalles de una emergencia, principales como secundarios ej: las unidades con los voluntarios que 
+# estan asignados a ellas
 def emergenciasDetalle(request,id_emergencia):
     emergencia = emergencias.objects.get(id_emergencia = id_emergencia)
     unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
@@ -304,6 +347,8 @@ def emergenciasDetalle(request,id_emergencia):
     }
     return render(request, '../templates/templatesAdministrador/emergenciasDetalles.html',data)
 
+# al completar una emergencia su estado pasa a falso para quedar registrado en la bdd pero que no aparezca
+# al momento de listar en la vista principal
 def emergenciasCompletar(request,id_emergencia):
     emergencia = emergencias.objects.get(id_emergencia = id_emergencia)
     unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
@@ -330,7 +375,7 @@ def emergenciasCompletar(request,id_emergencia):
 
     return redirect(admEmergencias)
 
-
+# permite asignar voluntarios a unidades durante una asignacion en emergencias
 def asignarAUnidades(request, nomenclatura, id_emergencia):
     unidad = unidades.objects.get(nomenclatura=nomenclatura)
     unidad.estado_unidad = False 
@@ -347,6 +392,7 @@ def asignarAUnidades(request, nomenclatura, id_emergencia):
     
     return redirect(admOrganizarEmergencias, id_emergencia=id_emergencia)
 
+# junta todos los datos anteriores para completar la creacion de una instancia emergencia
 def despachar(request,id_emergencia):
     emergencia = emergencias.objects.get(id_emergencia=id_emergencia)
     unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
@@ -363,29 +409,33 @@ def despachar(request,id_emergencia):
 
     return redirect(admEmergencias)
 
-
+# genera un pdf de todas las emergencias atendidas que se hayan despachado correctamente
 def generate_pdf(request):
-    emergenciaEmer = emergencias.objects.all()
+    adm = request.user
+    if adm.is_staff:
+        emergenciaEmer = emergencias.objects.all()
 
-    logo_path = "../static/Bomberos.png"
-    
-    # Obtén los datos que quieres mostrar en el PDF
-    data = {
-        'emergencias' : emergenciaEmer,
-        'logo_path' : logo_path,
-        # Agrega más datos según sea necesario
-    }
+        logo_path = "../static/Bomberos.png"
 
-    # Renderiza la plantilla a HTML
-    template = get_template('../templates/templatesAdministrador/generarPdf.html')
-    html = template.render(data)
+        # datos para mostrar en el PDF
+        data = {
+            'emergencias' : emergenciaEmer,
+            'logo_path' : logo_path,
+            # Agrega más datos según sea necesario
+        }
 
-    # Crea un objeto HTML de WeasyPrint
-    response = HttpResponse(content_type='application/pdf')
-    HTML(string=html).write_pdf(response)
+        # Renderiza la plantilla a HTML
+        template = get_template('../templates/templatesAdministrador/generarPdf.html')
+        html = template.render(data)
 
-    return response
+        # Crea un objeto HTML de WeasyPrint
+        response = HttpResponse(content_type='application/pdf')
+        HTML(string=html).write_pdf(response)
 
+        return response
+    else:
+        return redirect('login')
+        
 #Eliminar emergencias
 def emergenciasEliminar(request,id_emergencia):
     emergencia = emergencias.objects.get(id_emergencia = id_emergencia)

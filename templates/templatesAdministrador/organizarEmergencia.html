@@ -215,7 +215,7 @@
                                 <p>Voluntarios Disponibles: {{cuartel.voluntarios_in}}</p>
                                 <p>Conductores Disponibles: {{cuartel.conductores_in}}</p>
                                 <p>Unidades Disponibles: {{cuartel.unidades_in}}</p>
-                                {% if cuartel.voluntarios_in == 0 or cuartel.unidad_in == 0 or cuartel.conductores_in == 0 %}
+                                {% if cuartel.voluntarios_in == 0 or cuartel.unidades_in == 0 or cuartel.conductores_in == 0 %}
                                 <p>
                                     <button class="btn btn-outline-danger" type="button" data-toggle="collapse"
                                         data-target="#collapseError{{cuartel.idCuartel}}" aria-expanded="false"
@@ -241,10 +241,12 @@
                                 <div class="collapse" id="collapse{{cuartel.idCuartel}}">
                                     <div class="card card-body">
                                         {% for unidad in unidades %}
-                                        <a class="btn btn-outline-secondary" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#asignarVoluntariosModal{{ unidad.nomenclatura }}">
-                                            {{unidad.nomenclatura}}
-                                        </a>
+                                        {% if unidad.cuartel_actual_uni_id == cuartel.idCuartel %}
+                                            <a class="btn btn-outline-secondary" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#asignarVoluntariosModal{{ unidad.nomenclatura }}">
+                                                {{unidad.nomenclatura}}
+                                            </a>
+                                        {% endif %}
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -281,8 +283,8 @@
                             {% for voluntario in voluntarios %}
                             <table class="table table-striped table-inverse table-responsive">
                                 <tbody>
-                                    {% if voluntario.unidad_asignada == '' %}
                                     <tr>
+                                    {% if voluntario.unidad_asignada == '' and voluntario.cuartel_actual_vol_id == unidad.cuartel_actual_uni_id  %}
                                         <th>{{voluntario.numero_registro}}</th>
                                         <th>{{voluntario.nombres}}</th>
                                         <th>{{voluntario.apellidos}}</th>
