@@ -99,6 +99,7 @@ class emergencias(models.Model):
     fecha_emergencia = models.DateTimeField(auto_now_add=True)
     comentarioEmergencia = models.TextField(default='')
     EmergenciaActiva = models.BooleanField(default=True)
+    EmergenciaDepachada = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.id_emergencia

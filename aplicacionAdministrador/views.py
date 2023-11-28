@@ -259,7 +259,7 @@ def admEmergenciaDatos(request):
         if form.is_valid():
             emergencia = form.save()
             # Redirigir a emergenciasDetalle con el ID de la nueva emergencia
-            return redirect('organizarEmergencia' ,id_emergencia=emergencia.id_emergencia)
+            return redirect('emergencias')
             
     else:
         form = EmergenciaForm()
@@ -358,6 +358,7 @@ def despachar(request,id_emergencia):
 
     emergencia.unidades_in_emer = unidades.objects.filter(emergencia_atendida = id_emergencia).count()
     emergencia.voluntarios_in_emer = voluntariosEmer
+    emergencia.EmergenciaDepachada = True
     emergencia.save()
 
     return redirect(admEmergencias)
@@ -385,6 +386,33 @@ def generate_pdf(request):
 
     return response
 
+#Eliminar emergencias
+def emergenciasEliminar(request,id_emergencia):
+    emergencia = emergencias.objects.get(id_emergencia = id_emergencia)
+    unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
+    
+    unidadesID = []
+    for unidad in unidadesEmer:
+        unidadesID.append(unidad.nomenclatura)
 
+    voluntariosEmer = voluntarios.objects.filter(unidad_asignada__in = unidadesID)
+
+    for voluntario in voluntariosEmer:
+        voluntario.unidad_asignada = ''
+        voluntario.estado = True
+        voluntario.save()
+
+    emergencia.EmergenciaActiva = False
+    emergencia.save()
+
+    for unidad in unidadesEmer:
+        unidad.estado_unidad = True
+        unidad.estado_unidad = True
+        unidad.emergencia_atendida = 0
+        unidad.save()
+    
+    emergencia.delete()
+
+    return redirect(admEmergencias)
         
     

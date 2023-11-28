@@ -52,6 +52,7 @@ urlpatterns = [
     path('asignarAUnidades/<str:nomenclatura>/<int:id_emergencia>/', viewAdm.asignarAUnidades, name = 'asignarAUnidades'),
     path('despachar/<int:id_emergencia>/', viewAdm.despachar, name = 'despachar'),
     path('generar_pdf/', viewAdm.generate_pdf, name='generar_pdf'),
+    path('emergenciasEliminar/<int:id_emergencia>/', viewAdm.emergenciasEliminar, name='emergenciasEliminar'),
 
     path('', viewAdm.CustomLoginView.as_view(), name = 'login'),
 ]
