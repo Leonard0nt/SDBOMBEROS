@@ -375,10 +375,11 @@ def emergenciasCompletar(request,id_emergencia):
 
     return redirect(admEmergencias)
 
-# permite asignar voluntarios a unidades durante una asignacion en emergencias
+# permite asignar voluntarios a unidades y unidades a emergencias durante una asignacion en emergencias
 def asignarAUnidades(request, nomenclatura, id_emergencia):
     unidad = unidades.objects.get(nomenclatura=nomenclatura)
     unidad.estado_unidad = False 
+    conductorDisp = False
     unidad.emergencia_atendida = id_emergencia
     unidad.save()
 
@@ -386,9 +387,21 @@ def asignarAUnidades(request, nomenclatura, id_emergencia):
         ruts_seleccionados = request.POST.getlist('SelectVoluntarios')
         for rut in ruts_seleccionados:
             voluntario = voluntarios.objects.get(rut=rut)
-            voluntario.unidad_asignada = nomenclatura
-            voluntario.estado = False
-            voluntario.save()
+            if voluntario.conductor == True:
+                conductorDisp = True
+        
+        if conductorDisp == False:
+            messages.error(request, 'Debe seleccionar al menos un voluntario con el estado de conductor.',fail_silently=True)
+            unidad.estado_unidad =True
+            unidad.emergencia_atendida = 0
+            unidad.save()
+            return redirect(admOrganizarEmergencias, id_emergencia=id_emergencia)
+        else:
+            for rut in ruts_seleccionados:
+                voluntario = voluntarios.objects.get(rut=rut)
+                voluntario.unidad_asignada = nomenclatura
+                voluntario.estado = False
+                voluntario.save()
     
     return redirect(admOrganizarEmergencias, id_emergencia=id_emergencia)
 
@@ -396,18 +409,22 @@ def asignarAUnidades(request, nomenclatura, id_emergencia):
 def despachar(request,id_emergencia):
     emergencia = emergencias.objects.get(id_emergencia=id_emergencia)
     unidadesEmer = unidades.objects.filter(emergencia_atendida = id_emergencia)
-    unidadesID = []
-    for unidad in unidadesEmer:
-        unidadesID.append(unidad.nomenclatura)
+    if unidadesEmer:
+        unidadesID = []
+        for unidad in unidadesEmer:
+            unidadesID.append(unidad.nomenclatura)
 
-    voluntariosEmer = voluntarios.objects.filter(unidad_asignada__in=unidadesID).count()
+        voluntariosEmer = voluntarios.objects.filter(unidad_asignada__in=unidadesID).count()
 
-    emergencia.unidades_in_emer = unidades.objects.filter(emergencia_atendida = id_emergencia).count()
-    emergencia.voluntarios_in_emer = voluntariosEmer
-    emergencia.EmergenciaDepachada = True
-    emergencia.save()
+        emergencia.unidades_in_emer = unidades.objects.filter(emergencia_atendida = id_emergencia).count()
+        emergencia.voluntarios_in_emer = voluntariosEmer
+        emergencia.EmergenciaDepachada = True
+        emergencia.save()
 
-    return redirect(admEmergencias)
+        return redirect(admEmergencias)
+    else:
+        messages.error(request, 'Debe seleccionar al menos una unidad para la emergencia.',fail_silently=True)
+        return redirect(admOrganizarEmergencias, id_emergencia=id_emergencia)
 
 # genera un pdf de todas las emergencias atendidas que se hayan despachado correctamente
 def generate_pdf(request):

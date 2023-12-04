@@ -7,17 +7,17 @@ from aplicacionAdministrador.models import voluntarios
 class ContrasenaEditForm(forms.ModelForm):
     actual_password = forms.CharField(
         label='Contraseña actual',
-        widget=forms.PasswordInput(attrs={'class': 'form-control col-6'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control col-6 border-black'}),
         required=True,
     )
     new_password = forms.CharField(
         label='Nueva Contraseña',
-        widget=forms.PasswordInput(attrs={'class': 'form-control col-6'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control col-6 border-black'}),
         required=True,
     )
     confirm_password = forms.CharField(
         label='Confirmar Nueva Contraseña',
-        widget=forms.PasswordInput(attrs={'class': 'form-control col-6'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control col-6 border-black'}),
         required=True,
     )
 

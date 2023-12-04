@@ -278,41 +278,41 @@
                                 <div class="mb-3">
                                     <label for="id_nombres">Nombres:</label>
                                     <input type="text" id="id_nombres" name="nombres" value="{{ voluntario.nombres }}"
-                                        class="form-control">
+                                        class="form-control col-md-6 border-black">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="id_apellidos">Apellidos:</label>
                                     <input type="text" id="id_apellidos" name="apellidos"
-                                        value="{{ voluntario.apellidos }}" class="form-control">
+                                        value="{{ voluntario.apellidos }}" class="form-control col-md-6 border-black">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="id_cargo">Cargo:</label>
                                     <input type="text" id="id_cargo" name="cargo" value="{{ voluntario.cargo }}"
-                                        class="form-control">
+                                        class="form-control col-md-6 border-black">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="id_telefono">Teléfono:</label>
                                     <input type="text" id="id_telefono" name="telefono"
-                                        value="{{ voluntario.telefono }}" class="form-control">
+                                        value="{{ voluntario.telefono }}" class="form-control col-md-6 border-black">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="id_compania">Compañía:</label>
                                     <input type="text" id="id_compania" name="compania"
-                                        value="{{ voluntario.compania }}" class="form-control">
+                                        value="{{ voluntario.compania }}" class="form-control col-md-6 border-black">
                                 </div>
                                 <div class="mb-3">
                                     <label for="id_direccion">Dirección:</label>
-                                    <textarea id="id_direccion" name="direccion" class="form-control col-md-6"
+                                    <textarea id="id_direccion" name="direccion" class="form-control col-md-6 col-md-6 border-black"
                                         rows="2">{{ voluntario.direccion }}</textarea>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="id_conductor">Conductor:</label>
-                                    <input type="checkbox" id="id_conductor" name="conductor" {% if voluntario.conductor %}checked{% endif %}>
+                                    <input type="checkbox" id="id_conductor" name="conductor"  {% if voluntario.conductor %}checked{% endif %}>
                                 </div>
 
                                 <div class="d-flex">
@@ -345,7 +345,7 @@
                                 <div class="mb-3">
                                     <label for="id_nueva_contrasena">Nueva Contraseña:</label>
                                     <input type="password" id="id_nueva_contrasena" name="nueva_contrasena"
-                                        class="form-control">
+                                        class="form-control col-md-6 border-black">
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -366,8 +366,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>¿Estás seguro de que deseas eliminar al voluntario {{ voluntario.nombres }} {{
-                                voluntario.apellidos }}?</p>
+                            <p>¿Estás seguro de que deseas eliminar al voluntario {{ voluntario.nombres }} {{ voluntario.apellidos }}?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

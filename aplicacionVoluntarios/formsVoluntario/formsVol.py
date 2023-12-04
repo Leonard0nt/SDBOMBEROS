@@ -5,12 +5,12 @@ from aplicacionAdministrador.models import voluntarios
 class VoluntarioEditForm(forms.ModelForm):
     password = forms.CharField(
         label='Contraseña',
-        widget=forms.PasswordInput(attrs={'class': 'form-control col-6'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control col-6 border-black'}),
         required=True,
     )
     confirm_password = forms.CharField(
         label='Confirmar Contraseña',
-        widget=forms.PasswordInput(attrs={'class': 'form-control col-6'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control col-6 border-black'}),
         required=True,
     )
 
@@ -18,7 +18,7 @@ class VoluntarioEditForm(forms.ModelForm):
         model = voluntarios
         fields = ['nombres', 'apellidos', 'telefono', 'compania', 'direccion']
         widgets = {
-            'direccion': forms.Textarea(attrs={'rows': 2, 'class': 'form-control col-md-6'}),
+            'direccion': forms.Textarea(attrs={'rows': 2, 'class': 'form-control col-md-6 border-black'}),
         }
 
     def clean_password(self):

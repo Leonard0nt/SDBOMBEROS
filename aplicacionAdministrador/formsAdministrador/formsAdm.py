@@ -28,8 +28,8 @@ class VoluntarioForm(forms.ModelForm):
         widgets = {
             'direccion': forms.Textarea(attrs={'rows': 2}),
         }
-    # Puedes personalizar el formulario si es necesario
-    # Por ejemplo, puedes agregar validaciones adicionales, widgets, etc.
+        attrs = {'class': 'form-control col-md-6 border-black'}
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.username = self.cleaned_data['rut']  # Establece el username como el rut
@@ -38,6 +38,9 @@ class VoluntarioForm(forms.ModelForm):
         password = self.cleaned_data.get('password')
         user.set_password(password)
 
+
+        user.rut = self.cleaned_data['rut'].replace(".", "")
+        
         if commit:
             user.save()
         return user
@@ -46,6 +49,10 @@ class VoluntarioForm(forms.ModelForm):
     def clean_rut(self):
         rut = self.cleaned_data.get('rut')
         rut_sin_puntos = rut.replace(".", "")
+
+        if '-' not in rut:
+            raise forms.ValidationError('El formato del Rut es incorrecto. Debe contener un guion ("-").')
+
         if not validar_rut(rut_sin_puntos):
             raise forms.ValidationError('Rut inválido')
         return rut_sin_puntos

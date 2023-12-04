@@ -266,12 +266,12 @@
                                 <div class="mb-3">
                                     <label for="id_especialidad">Especialidad:</label>
                                     <input type="text" id="id_especialidad" name="especialidad"
-                                        value="{{ unidad.especialidad }}" class="form-control">
+                                        value="{{ unidad.especialidad }}" class="form-control col-md-6 col-md-6 border-black">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="id_cuartel_actual_uni">Cuartel Actual:</label>
-                                    <select id="id_cuartel_actual_uni" name="cuartel_actual_uni" class="form-select">
+                                    <select id="id_cuartel_actual_uni" name="cuartel_actual_uni" class="form-select col-md-6 col-md-6 border-black">
                                         {% for cuartel in cuarteles %}
                                             <option value="{{ cuartel.idCuartel }}" {% if cuartel.idCuartel == unidad.cuartel_actual_uni.idCuartel %} selected {% endif %}>
                                             {{ cuartel.nombre_cuartel }}
@@ -282,7 +282,7 @@
 
                                 <div class="mb-3">
                                     <label for="id_comentario">Comentario:</label>
-                                    <textarea id="id_comentario" name="comentario" class="form-control col-md-6"
+                                    <textarea id="id_comentario" name="comentario" class="form-control col-md-6 col-md-6 border-black"
                                         rows="2">{{ unidad.comentario }}</textarea>
                                 </div>
 

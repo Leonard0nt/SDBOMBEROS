@@ -203,6 +203,13 @@
 
         <div class="container">
             <form class="form mt-5" method="post">
+                {% if messages %}
+                <ul class="messages">
+                  {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
 
                 <div class="row mt-5">
                     <h4 style="text-align: center; margin-bottom: 50px;">Escoger cuarteles</h4>
@@ -274,6 +281,14 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="asignarVoluntariosModalLabel{{ unidad.nomenclatura }}">Voluntarios
                             disponibles a despachar</h5>
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
