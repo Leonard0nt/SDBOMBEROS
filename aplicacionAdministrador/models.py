@@ -56,7 +56,7 @@ class voluntarios(AbstractUser):
     cargo = models.CharField(max_length=15,default='')
     telefono = models.PositiveBigIntegerField(blank=True,default=9)
     compania = models.CharField(max_length=10,default='')
-    numero_registro = models.IntegerField(unique=True)
+    numero_registro = models.IntegerField(unique=True, default=0)
     estado = models.BooleanField(default=False)
     direccion = models.TextField(blank=True,default='')
     conductor = models.BooleanField(default=False)
